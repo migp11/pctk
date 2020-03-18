@@ -1,0 +1,20 @@
+{
+    "Ki67_positive_premitotic": "Alive", 
+    "Ki67_positive_postmitotic": "Alive",
+    "Ki67_positive": "Alive",
+    "Ki67_negative": "Alive",
+    "G0G1_phase": "Alive",
+    "G0_phase": "Alive",
+    "G1_phase": "Alive",
+    "G1a_phase": "Alive",
+    "G1b_phase": "Alive",
+    "G1c_phase": "Alive",
+    "S_phase": "Alive",
+    "G2M_phase": "Alive",
+    "G2_phase": "Alive",
+    "M_phase": "Alive",
+    "live": "Alive",
+    "apoptotic": "Apoptotic", 
+    "necrotic_lysed": "Necrotic",
+    "necrotic_swelling": "Necrotic" 
+}
