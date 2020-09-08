@@ -7,6 +7,51 @@ import xml.etree.ElementTree as ET
 
 
 
+default_phases_dict = {
+    0: "Ki67_positive_premitotic",
+    1: "Ki67_positive_postmitotic",
+    2: "Ki67_positive",
+    3: "Ki67_negative",
+    4: "G0G1_phase",
+    5: "G0_phase",
+    6: "G1_phase",
+    7: "G1a_phase",
+    8: "G1b_phase",
+    9: "G1c_phase",
+    10: "S_phase",
+    11: "G2M_phase",
+    12: "G2_phase",
+    13: "M_phase",
+    14: "live",
+    100: "apoptotic",
+    101: "necrotic_swelling",
+    102: "necrotic_lysed",
+    103: "necrotic",
+    104: "debris"
+    }
+
+default_phase_grouping = {
+    "Ki67_positive_premitotic": "live", 
+    "Ki67_positive_postmitotic": "live",
+    "Ki67_positive": "live",
+    "Ki67_negative": "live",
+    "G0G1_phase": "live",
+    "G0_phase": "live",
+    "G1_phase": "live",
+    "G1a_phase": "live",
+    "G1b_phase": "live",
+    "G1c_phase": "live",
+    "S_phase": "live",
+    "G2M_phase": "live",
+    "G2_phase": "live",
+    "M_phase": "live",
+    "live": "live",
+    "apoptotic": "apoptotic", 
+    "necrotic_lysed": "necrotic",
+    "necrotic_swelling": "necrotic" 
+}
+
+
 class Metadata(object):
     def __init__(self, tree):
 
@@ -58,11 +103,8 @@ class MultiCellDS(object):
         self._separator = sep
         self._output_folder = output_folder
 
-        self._phases_dict = {}
-        self._load_defaul_phasedict()
-
-        self._phase_grouping = {}
-        self._load_defaul_phasegrouping()
+        self._phases_dict = default_phases_dict
+        self._phase_grouping = default_phase_grouping
 
         xml_fname = os.path.join(output_folder, xml_fname)
         self._tree = ET.parse(xml_fname)
@@ -129,22 +171,6 @@ class MultiCellDS(object):
             columns.append((name, units, ID))
             
         return columns
-
-    def _load_defaul_phasedict(self):
-        phasedict_fname = os.path.join(self._param_folder, "cell_phases_dict.json")
-        phases_dict = {}
-        with open(phasedict_fname) as fh:
-            phases_dict = json.load(fh)
-            phases_dict = {int(k):v for k,v in phases_dict.items()}
-        
-        self._phases_dict = phases_dict
-
-    def _load_defaul_phasegrouping(self):
-        phasedict_fname = os.path.join(self._param_folder, "phases_grouping_dict.json")
-        phase_grouping = {}
-        with open(phasedict_fname) as fh:
-            phase_grouping = json.load(fh)
-        self._phase_grouping = phase_grouping
 
     @property
     def current_time(self):
@@ -230,7 +256,7 @@ class MultiCellDS(object):
         
             time = self.get_time(tree)
             yield (time, df)
-      
+  
     def get_microenvironment_fname(self, tree):
         root = tree.getroot()
         node = root.findall("microenvironment")[0]
@@ -252,5 +278,51 @@ class MultiCellDS(object):
             microenv_matrix = self.get_microenvironment_matrix(tree)
             time = self.get_time(tree)
             yield (time, microenv_matrix)
-    
 
+    def get_cells_summary_frame(self, phase_col="current_phase"):
+
+        cell_phases = list(set(self.phase_grouping.values()))
+        num_of_files = self.cells_file_count()
+
+        # Initializing a Pandas Databrafe to store the data
+        index = range(num_of_files)
+        columns = ["time"] + cell_phases
+        df_time_course = pd.DataFrame(columns=columns, dtype=int, index=index, data=0)
+        
+        for i, (time, df) in enumerate(self.cells_as_frames_iterator()):
+            df_time_course.iloc[i, 0] = time
+
+            # Rename the phases integer codes using the phases_dict as the mapping
+            s = df[phase_col]
+            s.replace(to_replace=self.phases_dict, value=None, inplace=True)
+
+            # Count the number of cells in each phase
+            counts = s.value_counts()
+
+            # group the previous phases count into the three general classes:
+            # Alive, Apoptotic, Necrotic
+            for k, v in counts.to_dict().items():
+                if k not in self.phase_grouping:
+                    continue
+                df_time_course.loc[i, self.phase_grouping[k]] += v
+        
+        return df_time_course
+
+
+    def plot_cells(self):
+        color_dict = {"alive": "g", "apoptotic": "r", "necrotic":"k"}
+
+        fig, ax = plt.subplots(1, 1, figsize=(6,4), dpi=150)
+        # Alive/Apoptotic/Necrotic vs Time
+        for k in columns:
+            ax.plot(df_time_course.Time, df_time_course[k], "-", c=color_dict[k], label=k)
+        # setting axes labels
+        ax.set_xlabel("time (min)")
+        ax.set_ylabel("Nº of cells")
+        # Showing legend
+        ax.legend()
+        ax.yaxis.grid(True)
+        fig.tight_layout()
+        # Saving fig
+        if save:
+            fig.savefig(output_folder + 'cell_vs_time.png')
