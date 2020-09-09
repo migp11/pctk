@@ -3,15 +3,22 @@
 tools4physicell is tiny project that aims to develop tools to analysis agent-based simulation of multicellular systems produced by the multi-scale modeling framework PhysiCell ([http://physicell.org/](http://physicell.org/)) developed by Paul Macklin at MathCancer. Although there are already available tools for handling PhysiCell outputs here we are gathering together and organizing those pieces of python code that its been anyhow, requrrently useful in the past, when dealing with PhysiCell. In general, most of the functionalities provided by this toolkit also handles the output format of the PhysiCell forked version PhysiBoSS developed at Institute Curie [https://github.com/sysbio-curie/PhysiBoSS](https://github.com/sysbio-curie/PhysiBoSS).
 
 # Installation
-tools4physicell is pure python code with few dependencies and only requieres the installation fo some python modules. 
-
+tools4physicell is pure python code with few dependencies and only requieres the installation of some python modules. 
+### On linux systems using virtualenv + pip
+- 1  create a new virtual environemnt, activate it and install the requirments
+~~~~
+virtualenv -p python3 myenv
+source myenv/bin/activate
+pip install -r requirements.txt
+~~~~
+Thats it! If you want to run the script from any location add the base folder to your PATH environmental variable. And if you want to access the multicellds class, add modules/multicellds.py to your PYTHONPATH.
 
 The last step for generating 3D renders of cell from .pov files, it is done using Persistence of Vision Ray Tracer (POV-Ray). POV-Ray is a cross-platform ray-tracing standalone program that generates images from a text-based scene description. POV-Ray is open source () and can be freely obtaind from: <br>
 * [http://www.povray.org/download/](http://www.povray.org/download/)
 
 # MultiCellDS class
 
-
+Upcomming
 
 # Ready-to-run scripts
 There are some ready-to-run scripts that can be used to summarize and visualize PhysiCell/PhysiBoSS simulation. These scripts allow to generate cell vs time plots as well 3D renders for time snapshots.
