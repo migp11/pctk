@@ -16,10 +16,9 @@
 	</options>
 
 	<save> <!-- done --> 
-		<!-- <folder>/home/mponce/local/research/multi-scale-modeling/paper-physibossa/output/wt/</folder> use . for root  -->
-		<folder>./test/</folder>
+		<folder>./output_test</folder>
 		<filebase>output</filebase> 
-		<time_index>3696</time_index> 
+		<time_index>0</time_index> 
 	</save>
 	
 	<clipping_planes> <!-- done --> 
