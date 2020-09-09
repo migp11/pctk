@@ -18,7 +18,7 @@ The last step for generating 3D renders of cell from .pov files, it is done usin
 
 # MultiCellDS class
 
-Upcomming
+Upcoming
 
 # Ready-to-run scripts
 There are some ready-to-run scripts that can be used to summarize and visualize PhysiCell/PhysiBoSS simulation. These scripts allow to generate cell vs time plots as well 3D renders for time snapshots.
