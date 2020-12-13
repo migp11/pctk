@@ -11,6 +11,17 @@ import xml.etree.ElementTree as ET
 
 import multiprocessing as mp
 
+
+__author__ = "Miguel Ponce de Leon"
+__copyright__ = "Copyright 2020, Tools for PhysiCell project"
+__credits__ = ["Miguel Ponce de Leon"]
+__license__ = "GPL 3.0"
+__version__ = "0.1.0"
+__maintainer__ = "Miguel Ponce de Leon"
+__email__ = "miguel.ponce@bsc.es"
+__status__ = "dev"
+
+
 default_POV_options = None
 options = None
 pigment_and_finish_function = None

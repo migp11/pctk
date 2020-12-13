@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
+__author__ = "Miguel Ponce de Leon"
+__copyright__ = "Copyright 2020, Tools for PhysiCell project"
+__credits__ = ["Miguel Ponce de Leon"]
+__license__ = "GNU"
+__version__ = "0.1.0"
+__maintainer__ = "Miguel Ponce de Leon"
+__email__ = "miguel.ponce@bsc.es"
+__status__ = "dev"
+
 import os, re, sys
 import glob, json
 import argparse

@@ -5,6 +5,15 @@ import pandas as pd
 from scipy.io import loadmat    
 import xml.etree.ElementTree as ET
 
+__author__ = "Miguel Ponce de Leon"
+__copyright__ = "Copyright 2020, Tools for PhysiCell project"
+__credits__ = ["Miguel Ponce de Leon"]
+__license__ = "GNU"
+__version__ = "0.1.0"
+__maintainer__ = "Miguel Ponce de Leon"
+__email__ = "miguel.ponce@bsc.es"
+__status__ = "dev"
+
 
 
 default_phases_dict = {
