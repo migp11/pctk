@@ -1,15 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-__author__ = "Miguel Ponce de Leon"
-__copyright__ = "Copyright 2020, Tools for PhysiCell project"
-__credits__ = ["Miguel Ponce de Leon"]
-__license__ = "GNU"
-__version__ = "0.1.0"
-__maintainer__ = "Miguel Ponce de Leon"
-__email__ = "miguel.ponce@bsc.es"
-__status__ = "dev"
-
 import os, re, sys
 import glob, json
 import argparse
@@ -21,6 +12,14 @@ from scipy.io import loadmat
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+__author__ = "Miguel Ponce de Leon"
+__copyright__ = "Copyright 2020, Tools for PhysiCell project"
+__credits__ = ["Miguel Ponce de Leon"]
+__license__ = "GPL 3.0"
+__version__ = "0.1.0"
+__maintainer__ = "Miguel Ponce de Leon"
+__email__ = "miguel.ponce@bsc.es"
+__status__ = "dev"
 
 modules_path = os.path.dirname(os.path.realpath(__file__))
 modules_path = os.path.join(modules_path, 'modules')
