@@ -156,7 +156,7 @@ class MultiCellDS(object):
             if size == 1:
                 cell_columns.append(column)
                 continue
-            for i, v in enumerate(['x', 'y', 'x']):
+            for i, v in enumerate(['x', 'y', 'z']):
                 cell_columns.append(v + self._separator + column)
                 if i == size: 
                     break
