@@ -1,6 +1,8 @@
-
 # Introduction
-tools4physicell is tiny project that aims to develop tools to analysis agent-based simulation of multicellular systems produced by the multi-scale modeling framework PhysiCell ([http://physicell.org/](http://physicell.org/)) developed by Paul Macklin at MathCancer. Although there are already available tools for handling PhysiCell outputs here we are gathering together and organizing those pieces of python code that its been anyhow, requrrently useful in the past, when dealing with PhysiCell. In general, most of the functionalities provided by this toolkit also handles the output format of the PhysiCell forked version PhysiBoSS developed at Institute Curie [https://github.com/sysbio-curie/PhysiBoSS](https://github.com/sysbio-curie/PhysiBoSS).
+tools4physicell is a tiny project that aims to develop a lightweight library and command-line general scripts to process and analyze agent-based simulation of multicellular systems produced by PhysiCell simulations ([http://physicell.org/](http://physicell.org/)) developed by Paul Macklin at MathCancer.
+<br>
+Although there are already available tools for handling PhysiCell outputs [https://github.com/PhysiCell-Tools/python-loader](https://github.com/PhysiCell-Tools/python-loader), here we aim to gather together and organize different pieces of python code that have been anyhow, recurrently useful in the past, when dealing with PhysiCell and PhysiBoSS. Currently, the package implements a simple module ([multicellds.py](https://github.com/migp11/tools4physicell/blob/master/modules/multicellds.py)) to parse and handle MultiCellDS XML file format and uses the schema defined there to parse and process \.mat files containing the cells and microenvironment time dependent output. On the top of this module we have developed a set of command-line tools for processing and creating basic plots, including time courses of the number of alive and dead cells (apoptotic, necrotic) as well as to generate POV files used as inputs for rendering nice 3D representations of the multicellular system.
+<br>
 
 # Installation
 tools4physicell is pure python code with few dependencies and only requieres the installation of some python modules. 
@@ -52,12 +54,13 @@ optional arguments:
 
 
 ## Generations of pov files for 3D rendering: povwriter.py
-The script povwriter.py reads  <br>
 This script is a "literal" translation from C++ to Python 3. \
 The original C++ povrtiter is developed an mantined by Paul Macklin at MatchCancer \
 and can be found in the following link [https://github.com/PhysiCell-Tools/PhysiCell-povwriter](https://github.com/PhysiCell-Tools/PhysiCell-povwriter)
 <br>
-While I've not found many difference at the level of performance, the main advantage of having python version of PhysiCell-povwriter is that is much easiert to extend and customize. Furthermore, handling command line arguments and parsing config files is also much easier in python. Nonetheless, the original motivation of this development was to have a povwrite capable of handling PhysiBoSS output format (which is different from PhysiCell's format). In its current version povwriter.py can read and process
+While I've not found many difference at the level of performance, the main advantage of having python version of PhysiCell-povwriter is that is much easiert to extend and customize. Furthermore, handling command line arguments and parsing config files is also much easier in python. Nonetheless, the original motivation of this development was to have a povwrite capable of handling PhysiBoSS output format (which is different from PhysiCell's format).<br>
+The script povwriter.py reads xml configuration file and then iterates over a range of \*.mat files to create pov files.<br>
+The generated pov files can then be renderied usign the open source The Persistence of Vision Raytracer suite PovRay ([http://www.povray.org/](http://www.povray.org/)).
 
 ~~~~
 usage: povwriter.py [-h] [--idxs STRN_IDXS] [--format {physicell,physiboss}]
