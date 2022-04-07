@@ -12,36 +12,12 @@ from scipy.io import loadmat
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-__author__ = "Miguel Ponce de Leon"
-__copyright__ = "Copyright 2020, Tools for PhysiCell project"
-__credits__ = ["Miguel Ponce de Leon"]
-__license__ = "GPL 3.0"
-__version__ = "0.1.0"
-__maintainer__ = "Miguel Ponce de Leon"
-__email__ = "miguel.ponce@bsc.es"
-__status__ = "dev"
-
-modules_path = os.path.dirname(os.path.realpath(__file__))
-modules_path = os.path.join(modules_path, 'modules')
-sys.path.append(modules_path)
-
-import multicellds 
+from tools4physicell import multicellds 
 
 
 sns.set(style="ticks", palette="Paired")
 sns.set_context('paper')
 
-def read_csv():
-    # reading a cell_output file (plain text ; separated columns)
-    # any function can be used here, using pandas is just a shorcut
-    if args.format == 'mat':
-        df = process_mat(f)
-        phase_col = "current_phase"
-        # This should be changed regardin time stamp in MultiCellDS
-        time *= 60 
-    elif args.format == 'csv':
-        df = process_csv(f, sep=";")
-        phase_col = "phase"
 
 def create_parser():
     parser = argparse.ArgumentParser(description="Plot total cell grouped as Alive/Necrotic/Apoptotic vs Time")

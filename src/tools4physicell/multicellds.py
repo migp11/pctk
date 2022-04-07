@@ -5,6 +5,9 @@ import pandas as pd
 from scipy.io import loadmat    
 import xml.etree.ElementTree as ET
 
+from .config import phases_dict as default_phases_dict
+from .config import phase_grouping as default_phase_grouping
+
 __author__ = "Miguel Ponce de Leon"
 __copyright__ = "Copyright 2020, Tools for PhysiCell project"
 __credits__ = ["Miguel Ponce de Leon"]
@@ -14,68 +17,24 @@ __maintainer__ = "Miguel Ponce de Leon"
 __email__ = "miguel.ponce@bsc.es"
 __status__ = "dev"
 
-default_phases_dict = {
-    0: "Ki67_positive_premitotic",
-    1: "Ki67_positive_postmitotic",
-    2: "Ki67_positive",
-    3: "Ki67_negative",
-    4: "G0G1_phase",
-    5: "G0_phase",
-    6: "G1_phase",
-    7: "G1a_phase",
-    8: "G1b_phase",
-    9: "G1c_phase",
-    10: "S_phase",
-    11: "G2M_phase",
-    12: "G2_phase",
-    13: "M_phase",
-    14: "live",
-    100: "apoptotic",
-    101: "necrotic_swelling",
-    102: "necrotic_lysed",
-    103: "necrotic",
-    104: "debris"
-    }
-
-default_phase_grouping = {
-    "Ki67_positive_premitotic": "live", 
-    "Ki67_positive_postmitotic": "live",
-    "Ki67_positive": "live",
-    "Ki67_negative": "live",
-    "G0G1_phase": "live",
-    "G0_phase": "live",
-    "G1_phase": "live",
-    "G1a_phase": "live",
-    "G1b_phase": "live",
-    "G1c_phase": "live",
-    "S_phase": "live",
-    "G2M_phase": "live",
-    "G2_phase": "live",
-    "M_phase": "live",
-    "live": "live",
-    "apoptotic": "apoptotic", 
-    "necrotic_lysed": "necrotic",
-    "necrotic_swelling": "necrotic" 
-}
-
 
 class Metadata(object):
     def __init__(self, tree):
 
         root = tree.getroot()
-        metadata_node = root.findall("metadata")[0]
+        metadata_node = root.find("metadata")
 
-        node = metadata_node.findall("current_time")[0]
+        node = metadata_node.find("current_time")
         self._current_time = int(float(node.text))
         self._time_units = node.attrib['units']
         
-        node = metadata_node.findall("current_runtime")[0]
+        node = metadata_node.find("current_runtime")
         self._current_runtime = float(node.text)
         self._runtime_units = node.attrib['units']
 
-        micro_env_node = root.findall("microenvironment")[0]
-        node = micro_env_node.findall("domain")[0]
-        node = node.findall("mesh")[0]
+        micro_env_node = root.find("microenvironment")
+        node = micro_env_node.find("domain")
+        node = node.find("mesh")
         self._spatial_units = node.attrib['units']
     
     @property
@@ -123,8 +82,8 @@ class MultiCellDS(object):
 
     def _get_time_units(self):
         root = self._tree.getroot()
-        node = root.findall("metadata")[0]
-        node = node.findall("current_time")[0]
+        node = root.find("metadata")
+        node = node.find("current_time")
         units = node.attrib['units']
         return units
 
@@ -143,10 +102,10 @@ class MultiCellDS(object):
     
     def _get_cell_columns(self):
         root = self._tree.getroot()
-        node = root.findall("cellular_information")[0]
+        node = root.find("cellular_information")
         
         node = self._get_cell_info_recursive(node)
-        cellular_info_node = node.findall("labels")[0]
+        cellular_info_node = node.find("labels")
         
         cell_columns = []
         for child in cellular_info_node:
@@ -166,9 +125,9 @@ class MultiCellDS(object):
 
     def _get_microenvironment_columns(self):
         root = self._tree.getroot()
-        node = root.findall("microenvironment")[0]
-        node = node.findall("domain")[0]
-        node = node.findall("variables")[0]
+        node = root.find("microenvironment")
+        node = node.find("domain")
+        node = node.find("variables")
         
         columns = []
         for child in node.findall("variable"):
@@ -215,15 +174,15 @@ class MultiCellDS(object):
     def phase_grouping(self):
         return self._phase_grouping
 
-    def read_matlab_mat(self, fname, column):
+    def _read_matlab_mat(self, fname, column):
         stru = loadmat(fname)
         data = stru[column]
         return data
 
     def get_time(self, tree):
         root = tree.getroot()
-        node = root.findall("metadata")[0]
-        node = node.findall("current_time")[0]
+        node = root.find("metadata")
+        node = node.find("current_time")
         time = int(float(node.text))
         return time
 
@@ -232,15 +191,15 @@ class MultiCellDS(object):
 
     def get_cells_fname(self, tree):
         root = tree.getroot()
-        node = root.findall("cellular_information")[0]
+        node = root.find("cellular_information")
         node = self._get_cell_info_recursive(node)
-        node = node.findall("filename")[0]
+        node = node.find("filename")
         return node.text
 
     def get_cells_matrix(self, tree):
         matfile = self.get_cells_fname(tree)
         matfile = os.path.join(self._output_folder, matfile)
-        data = self.read_matlab_mat(matfile, "cells")
+        data = self._read_matlab_mat(matfile, "cells")
         return data.T
 
     def cells_as_matrix_iterator(self):
@@ -266,16 +225,16 @@ class MultiCellDS(object):
   
     def get_microenvironment_fname(self, tree):
         root = tree.getroot()
-        node = root.findall("microenvironment")[0]
-        node = node.findall("domain")[0]
-        node = node.findall("data")[0]
-        node = node.findall("filename")[0]
+        node = root.find("microenvironment")
+        node = node.find("domain")
+        node = node.find("data")
+        node = node.find("filename")
         return node.text
 
     def get_microenvironment_matrix(self, tree):
         matfile = self.get_microenvironment_fname(tree)
         matfile = os.path.join(self._output_folder, matfile)
-        data = self.read_matlab_mat(matfile, "multiscale_microenvironment")
+        data = self._read_matlab_mat(matfile, "multiscale_microenvironment")
         return data
         
     def microenvironment_as_matrix_iterator(self):

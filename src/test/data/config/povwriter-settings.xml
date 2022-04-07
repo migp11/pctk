@@ -10,13 +10,12 @@
 	<options> <!-- done -->
 		<use_standard_colors>true</use_standard_colors>
 		<nuclear_offset units="micron">0.1</nuclear_offset> <!-- how far to clip nuclei in front of cyto --> 
-		<!-- <cell_bound units="micron">750</cell_bound> only plot if |x| , |y| , |z| < cell_bound -->
 		<cell_bound units="micron">500</cell_bound> <!-- only plot if |x| , |y| , |z| < cell_bound -->
 		<threads>1</threads>
 	</options>
 
 	<save> <!-- done --> 
-		<folder>./output_test</folder>
+		<folder>./src/test/data/output/</folder>
 		<filebase>output</filebase> 
 		<time_index>0</time_index> 
 	</save>
