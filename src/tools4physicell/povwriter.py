@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
-
+import os
 import numpy as np
 from math import pi, sin, cos
 
@@ -87,11 +87,12 @@ class PC_Options:
 
     def create_file_name(self, index):
         if self.format == 'physicell':
-            fname  = "%s/%s%08i_cells_physicell.mat" % (self.folder, self.filebase, index)
+            fname  = "{base_name}{:08}_cells_physicell.mat".format(index, base_name=self.filebase)
         elif self.format == 'physiboss':
-            fname  = "%s/cells_%05i.txt" % (self.folder, index)
+            fname  = "cells_{:05}.txt".format(index)
         else:
             fname = None
+        fname = os.path.join(self.folder, fname)
         return fname
 
 
@@ -146,6 +147,7 @@ class POVWriter_config():
         self.cell_color_definitions = {0: default_pov_colors}
 
 
+    # This method parse XML povwriter config file
     def load_config_file(self, fname):
         
         tree = ET.parse(fname)

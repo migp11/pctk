@@ -58,9 +58,17 @@ def check_povray(exec='povray'):
     return (povray_path is None)
 
 
-
 povray_path = None
 pov_files = []
+
+
+def collect_result(fname):
+    pov_files.append(fname)
+
+def local_write_pov_file(writer, idx):
+    fname = writer.write_pov_file(idx)
+    return fname
+
 
 def main():
     parser = create_parser()
@@ -94,28 +102,23 @@ def main():
     
     print(f"Start processing  {num_of_jobs} cpus")
     if num_of_jobs > 1:
-        print("pass")
-        # def collect_result(fname):
-        #     pov_files.append(fname)
+        
 
-        # def local_write_pov_file(writer, idx):
-        #     print(idx)
-        #     # fname = writer.write_pov_file(idx)
-        #     return idx
 
-        # pool = mp.Pool(num_of_jobs)
+        pool = mp.Pool(num_of_jobs)
+
         # for idx in index_list:
-        #     pool.apply_async(local_write_pov_file, args=((pov_writer,idx)), callback=collect_result)
+            # pool.apply_async(local_write_pov_file, args=((idx,)), callback=collect_result)
+        pov_files = [pool.apply(local_write_pov_file, args=((pov_writer,idx)))
+                                        for idx in index_list]
 
-        # pool.close()
+        pool.close()
         # pool.join()
-        # if args.render:
-        #     _ = [pool.apply(render_to_png, args=(fname, args.width, args.height))
-        #                 for fname in results]
+        print("Finished!")
+        if args.render:
+            _ = [pool.apply(render_to_png, args=(fname, args.width, args.height))
+                        for fname in pov_files]
         
     else:
         for idx in index_list:
             pov_writer.write_pov_file(idx)
-
-
-main()
