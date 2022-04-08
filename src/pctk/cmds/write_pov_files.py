@@ -45,29 +45,30 @@ def create_parser():
     return parser
 
 
-def render_to_png(pov_fname, width, height):
-    cmd_line = f"{povray_path} -h{height} -w{width} -a {pov_fname}"
-    exit_flag = os.system(cmd_line)
-    if exit_flag != 0:
-        print(f"Somthing went wrong running povray {cmd_line}. Command finished with exit flag {exit_flag}")
-
-
 def check_povray(exec='povray'):
     global povray_path
     povray_path = shutil.which(exec)
     return (povray_path is None)
 
 
-povray_path = None
-pov_files = []
-
-
-def collect_result(fname):
-    pov_files.append(fname)
-
 def local_write_pov_file(writer, idx):
     fname = writer.write_pov_file(idx)
     return fname
+
+def render_to_png(pov_fname, width, height):
+    cmd_line = f"{povray_path} -h{height} -w{width} -a {pov_fname}"
+    exit_flag = os.system(cmd_line)
+    if exit_flag != 0:
+        print(f"Somthing went wrong running povray {cmd_line}. Command finished with exit flag {exit_flag}")
+
+    png_fname = pov_fname[0:-4] + ".png"
+    return png_fname
+
+def animate_pngs(png_files):
+    pass
+
+
+povray_path = None
 
 
 def main():
@@ -102,22 +103,18 @@ def main():
     
     print(f"Start processing  {num_of_jobs} cpus")
     if num_of_jobs > 1:
-        
-
 
         pool = mp.Pool(num_of_jobs)
-
-        # for idx in index_list:
-            # pool.apply_async(local_write_pov_file, args=((idx,)), callback=collect_result)
         pov_files = [pool.apply(local_write_pov_file, args=((pov_writer,idx)))
                                         for idx in index_list]
-
         pool.close()
-        # pool.join()
+
         print("Finished!")
         if args.render:
-            _ = [pool.apply(render_to_png, args=(fname, args.width, args.height))
+            png_files = [pool.apply(render_to_png, args=(fname, args.width, args.height))
                         for fname in pov_files]
+            
+            animate_pngs(png_files)
         
     else:
         for idx in index_list:
