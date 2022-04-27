@@ -9,7 +9,7 @@ from .config import phases_dict as default_phases_dict
 from .config import phase_grouping as default_phase_grouping
 
 __author__ = "Miguel Ponce de Leon"
-__copyright__ = "Copyright 2020, Tools for PhysiCell project"
+__copyright__ = "Copyright 2020, PhysiCell ToolKit project"
 __credits__ = ["Miguel Ponce de Leon"]
 __license__ = "GPL 3.0"
 __version__ = "0.1.0"
