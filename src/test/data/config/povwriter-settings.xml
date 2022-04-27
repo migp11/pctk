@@ -2,7 +2,7 @@
 
 <povwriter_settings>
 	<camera> <!-- done -->
-		<distance_from_origin units="micron">1500</distance_from_origin>
+		<distance_from_origin units="micron">750</distance_from_origin>
 		<xy_angle>3.92699081699</xy_angle> <!-- 5*pi/4 -->
 		<yz_angle>1.0471975512</yz_angle> <!-- pi/3 --> 
 	</camera>
