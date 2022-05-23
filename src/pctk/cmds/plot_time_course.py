@@ -84,7 +84,6 @@ def main():
         counts = s.value_counts()
     
         df_time_course.loc[i, 'time'] = t
-        print("time:", t)
         # group the previous phases count into the three general classes:
         # Alive, Apoptotic, Necrotic
         for k, v in counts.to_dict().items():
@@ -93,7 +92,7 @@ def main():
             df_time_course.loc[i, phase_grouping[k]] += v
             
     
-    
+    print("Finish processing files")    
     # Set time column as the dataframe index
     sns.set_context('paper')
     patch_color = "lightgrey"
@@ -136,4 +135,6 @@ def main():
         print("Saving csv as %s" % args.csv_fname)
 
 
+if __name__ == '__main__':
+    main()
 

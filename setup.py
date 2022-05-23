@@ -13,7 +13,7 @@ if os.path.isfile(requirementPath):
 
 setuptools.setup(
     name="pctk",
-    version="0.0.1",
+    version="0.1.0",
     author="Miguel Ponce de Leon",
     author_email="miguel.ponce@bsc.es",
     description="PhysiCell ToolKit: a tool for handling MultiCellDS output from PhysiCell and PhysiBoSS simulations.",

@@ -12,7 +12,7 @@ def create_parser():
 
     povray_link = "http://www.povray.org/download/"
 
-    parser = argparse.ArgumentParser(description="Render a bunch of physicell outputfile into povray files")
+    parser = argparse.ArgumentParser(description="Render a bunch of PhysiCell output file into povray files")
     
     parser.add_argument("xml_config", action="store", help="XML configuration file")
 
@@ -27,13 +27,13 @@ def create_parser():
     parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
                         help="Format of the input data", default="physicell")
 
-    parser.add_argument("--render",  dest="render", default=False, type=bool, 
+    parser.add_argument("--render",  action='store_true',
                         help="Render the .pov files into .png. Requires povray ({povray_link})")
 
     parser.add_argument("--width", action="store", dest="width", type=int, default=2160, 
                         help="Width for povray rendered image")
 
-    parser.add_argument("--heigh", action="store", dest="heigh", type=int, default=2160, 
+    parser.add_argument("--height", action="store", dest="height", type=int, default=2160, 
                         help="Heigh for povray rendered image")
 
     parser.add_argument("--cpus", action="store", dest="cpus", type=int, default=4, 
@@ -48,7 +48,7 @@ def create_parser():
 def check_povray(exec='povray'):
     global povray_path
     povray_path = shutil.which(exec)
-    return (povray_path is None)
+    return (povray_path is not None)
 
 
 def local_write_pov_file(writer, idx):
@@ -111,11 +111,18 @@ def main():
 
         print("Finished!")
         if args.render:
-            png_files = [pool.apply(render_to_png, args=(fname, args.width, args.height))
-                        for fname in pov_files]
+            png_files = []
+            for fname in pov_files:
+                png = render_to_png(fname, args.width, args.height)
+                png_files.append(png)
             
-            animate_pngs(png_files)
+            pool.close()
+            #animate_pngs(png_files)
         
     else:
         for idx in index_list:
             pov_writer.write_pov_file(idx)
+
+
+if __name__ == '__main__':
+    main()
