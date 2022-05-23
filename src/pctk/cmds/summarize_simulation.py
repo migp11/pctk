@@ -114,4 +114,4 @@ def main():
     fig.tight_layout()
     fig.savefig(instance_folder + 'variables_vs_time.png')
 
-main()
+

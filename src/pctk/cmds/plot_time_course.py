@@ -135,5 +135,5 @@ def main():
         df_time_course.to_csv(args.csv_fname, sep="\t")
         print("Saving csv as %s" % args.csv_fname)
 
-main()
+
 
