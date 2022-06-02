@@ -4,13 +4,6 @@ import os
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-root = os.path.dirname(os.path.realpath(__file__))
-requirementPath = root + '/requirements.txt'
-install_requires = []
-if os.path.isfile(requirementPath):
-    with open(requirementPath) as f:
-        install_requires = f.read().splitlines()
-
 setuptools.setup(
     name="pctk",
     version="0.1.0",
