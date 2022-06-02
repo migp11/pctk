@@ -54,7 +54,7 @@ def main():
     
     phases_dict = multicellds.default_phases_dict
     phase_grouping = multicellds.default_phase_grouping
-    
+    print(phases_dict)
     # Globing output files according to the output format specified
     if args.format == 'physicell':
         phase_col = "current_phase"
@@ -78,7 +78,7 @@ def main():
 
         # Rename the phases integer codes using the phases_dict as the mapping
         s = df[phase_col]
-        s.replace(to_replace=phases_dict, value=None, inplace=True)
+        s.replace(to_replace=phases_dict, inplace=True)
         
         # Count the number of cells in each phase
         counts = s.value_counts()
