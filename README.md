@@ -9,9 +9,9 @@ PCTK is pure python code with few dependencies and only requieres the installati
 ### On linux systems using virtualenv + pip
 - 1  create a new virtual environemnt, activate it and install the requirments
 ~~~~
-virtualenv -p python3 myenv
+virtualenv -p python3.8 myenv
 source myenv/bin/activate
-pip install -r requirements.txt
+python setup.py install
 ~~~~
 Thats it! If you want to run the script from any location add the base folder to your PATH environmental variable. And if you want to access the multicellds class, add modules/multicellds.py to your PYTHONPATH.
 
