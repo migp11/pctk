@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pctk",
-    version="0.0.2",
+    version="0.1.9",
     author="Miguel Ponce de Leon",
     author_email="miguel.ponce@bsc.es",
     description="PhysiCell ToolKit: a tool for handling MultiCellDS output from PhysiCell and PhysiBoSS simulations.",
