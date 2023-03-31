@@ -115,10 +115,16 @@ class MultiCellDS(object):
             if size == 1:
                 cell_columns.append(column)
                 continue
-            for i, v in enumerate(['x', 'y', 'z']):
-                cell_columns.append(v + self._separator + column)
-                if i == size: 
-                    break
+            if size == 2:
+                for i, v in enumerate(['x', 'y']):
+                    cell_columns.append(v + self._separator + column)
+                    if i == size: 
+                        break
+            if size == 3:
+                for i, v in enumerate(['x', 'y', 'z']):
+                    cell_columns.append(v + self._separator + column)
+                    if i == size: 
+                        break
                 
                 
         return cell_columns
@@ -175,10 +181,13 @@ class MultiCellDS(object):
         return self._phase_grouping
 
     def _read_matlab_mat(self, fname, column):
-        stru = loadmat(fname)
-        data = stru[column]
-        return data
-
+        try:
+            stru = loadmat(fname)
+            data = stru[column]
+            return data
+        except:
+            print("cannot read mat file " + fname)
+            return None
     def get_time(self, tree):
         root = tree.getroot()
         node = root.find("metadata")
@@ -260,7 +269,7 @@ class MultiCellDS(object):
 
             # Rename the phases integer codes using the phases_dict as the mapping
             s = df[phase_col]
-            s.replace(to_replace=self.phases_dict, inplace=True)
+            s.replace(to_replace=self.phases_dict,  value=None,inplace=True)
 
             # Count the number of cells in each phase
             counts = s.value_counts()
