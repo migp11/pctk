@@ -47,11 +47,10 @@ def count_pb_files(data_folder):
     globing = os.path.join(data_folder, "cells_[0-9]*.txt")
     return len(glob.glob(globing))
 
-def main():
-   
-    parser = create_parser()
-    args = parser.parse_args()
-    
+
+
+def plot_time_course(args):
+
     phases_dict = multicellds.default_phases_dict
     phase_grouping = multicellds.default_phase_grouping
     print(phases_dict)
@@ -134,6 +133,14 @@ def main():
         df_time_course.to_csv(args.csv_fname, sep="\t")
         print("Saving csv as %s" % args.csv_fname)
 
+
+
+def main():
+   
+    parser = create_parser()
+    args = parser.parse_args()
+    
+    
 
 if __name__ == '__main__':
     main()

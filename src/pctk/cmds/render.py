@@ -8,6 +8,83 @@ import numpy as np
 import multiprocessing as mp
 from pctk.povwriter import POVWriter
 
+povray_path = None
+
+DEFAULT_XML = """
+<?xml version="1.0" encoding="UTF-8"?>
+
+<povwriter_settings>
+	<camera> <!-- done -->
+		<distance_from_origin units="micron">750</distance_from_origin>
+		<xy_angle>3.92699081699</xy_angle> <!-- 5*pi/4 -->
+		<yz_angle>1.0471975512</yz_angle> <!-- pi/3 --> 
+	</camera>
+
+	<options> <!-- done -->
+		<use_standard_colors>true</use_standard_colors>
+		<nuclear_offset units="micron">0.1</nuclear_offset> <!-- how far to clip nuclei in front of cyto --> 
+		<cell_bound units="micron">500</cell_bound> <!-- only plot if |x| , |y| , |z| < cell_bound -->
+		<threads>1</threads>
+	</options>
+
+	<save> <!-- done --> 
+		<folder>./src/test/data/output/</folder>
+		<filebase>output</filebase> 
+		<time_index>0</time_index> 
+	</save>
+	
+	<clipping_planes> <!-- done --> 
+		<clipping_plane>0,-1,0,0</clipping_plane>
+		<clipping_plane>-1,0,0,0</clipping_plane>
+		<clipping_plane>0,0,1,0</clipping_plane>
+	</clipping_planes>
+	
+	<!-- if using standard coloring (above), these will be used --> 
+	<!-- otherwise, the code will look for a user-defined color/finish function -->  <!-- done --> 
+	<cell_color_definitions>
+		<!-- each cell's type will be used to choose a coloring scheme for live, apoptotic, or necrotic -->
+		<!-- If the cell's type is not recognized, the standard coloring function will default to 0 --> 
+		<cell_colors type="0">
+			<live>
+				<cytoplasm>.25,1,.25</cytoplasm> <!-- red,green,blue,filter --> 
+				<nuclear>0.03,0.125,0</nuclear>
+				<finish>0.05,1,0.1</finish> <!-- ambient,diffuse,specular -->
+			</live>
+			<apoptotic>
+				<cytoplasm>1,0,0</cytoplasm> <!-- red,green,blue,filter --> 
+				<nuclear>0.125,0,0</nuclear>
+				<finish>0.05,1,0.1</finish> <!-- ambient,diffuse,specular -->
+			</apoptotic>
+			<necrotic>
+				<cytoplasm>1,0.5412,0.1490</cytoplasm> <!-- red,green,blue,filter --> 
+				<nuclear>0.125,0.06765,0.018625</nuclear>
+				<finish>0.01,0.5,0.1</finish> <!-- ambient,diffuse,specular -->
+			</necrotic>
+		</cell_colors>
+		
+		<cell_colors type="1">
+			<live>
+				<cytoplasm>0.25,0.25,1</cytoplasm> <!-- red,green,blue,filter --> 
+				<nuclear>0.03,0.03,0.125</nuclear>
+				<finish>0.05,1,0.1</finish> <!-- ambient,diffuse,specular -->
+			</live>
+			<apoptotic>
+				<cytoplasm>1,0,0</cytoplasm> <!-- red,green,blue,filter --> 
+				<nuclear>0.125,0,0</nuclear>
+				<finish>0.05,1,0.1</finish> <!-- ambient,diffuse,specular -->
+			</apoptotic>
+			<necrotic>
+				<cytoplasm>1,0.5412,0.1490</cytoplasm> <!-- red,green,blue,filter --> 
+				<nuclear>0.125,0.06765,0.018625</nuclear>
+				<finish>0.01,0.5,0.1</finish> <!-- ambient,diffuse,specular -->
+			</necrotic>
+		</cell_colors>
+	
+	</cell_color_definitions>
+
+</povwriter_settings>
+"""
+
 def create_parser():
 
     povray_link = "http://www.povray.org/download/"
@@ -44,12 +121,10 @@ def create_parser():
 
     return parser
 
-
 def check_povray(exec='povray'):
     global povray_path
     povray_path = shutil.which(exec)
     return (povray_path is not None)
-
 
 def local_write_pov_file(writer, idx):
     fname = writer.write_pov_file(idx)
@@ -67,14 +142,7 @@ def render_to_png(pov_fname, width, height):
 def animate_pngs(png_files):
     pass
 
-
-povray_path = None
-
-
-def main():
-    parser = create_parser()
-    args = parser.parse_args()
-
+def write_pov_files(args):
     if args.render:
         assert check_povray()
     
@@ -108,7 +176,6 @@ def main():
         pov_files = [pool.apply(local_write_pov_file, args=((pov_writer,idx)))
                                         for idx in index_list]
         pool.close()
-
         print("Finished!")
         if args.render:
             png_files = []
@@ -123,6 +190,10 @@ def main():
         for idx in index_list:
             pov_writer.write_pov_file(idx)
 
+def main():
+    parser = create_parser()
+    args = parser.parse_args()
+    write_pov_files(args)
 
 if __name__ == '__main__':
     main()
