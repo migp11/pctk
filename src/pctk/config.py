@@ -43,7 +43,6 @@ phases_dict = {
     104: "debris"
     }
 
-
 default_pov_colors = { 
     'live':{
             'cytoplasm': [.25, 1, .25],
