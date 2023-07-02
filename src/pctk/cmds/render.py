@@ -147,7 +147,7 @@ def write_pov_files(args):
         assert check_povray()
     
     # Loadgin XML configuration 
-    pov_writer = POVWriter(args.xml_config, format=args.format)
+    pov_writer = POVWriter(args.config, format=args.format)
 
     num_of_jobs = args.cpus
 
