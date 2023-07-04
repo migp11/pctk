@@ -1,21 +1,19 @@
-import os, sys
+import sys
 import argparse
-from pctk.cmds import plot
-from pctk.cmds import render
+from pctk import plot
+from pctk import render
+from pctk import config
 
 
 
 
-
-
-def main():
-    
+def main(): 
     parser = argparse.ArgumentParser(description="PhysiCell Tool Kit for handling and processing Physicell outputs")
     subparser = parser.add_subparsers(dest='command', help='sub-command help')
     
     plot_parser = subparser.add_parser('plot-time-course',
                                         description="Plot total cell grouped as Alive/Necrotic/Apoptotic vs Time")
-    plot_parser.add_argument("data_folder", action="store", help="folder were the data is stored")
+    plot_parser.add_argument("output_folder", action="store", help="Folder where the simulation output is stored")
     plot_parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
                         help="Format of the input data", default="physicell")
     plot_parser.add_argument("--figout", action="store", dest="fig_fname", default="./cell_vs_time.png",
@@ -24,16 +22,8 @@ def main():
                         help="File name to store the summary table used for the plot")
 
 
-    pov_parser = subparser.add_parser('povwriter')
+    pov_parser = subparser.add_parser('povray')
     pov_parser.add_argument("--config", action="store", help="XML configuration file for creating pov files")
-    pov_parser.add_argument("--idxs", action="store", dest="strn_idxs", 
-                        help="String specifing the indexes of the output files. \
-                            The supported options include: \
-                            - slices: 1:10:1\
-                            - indexes: 1,2,5,10\
-                            - all (use glob)", 
-                        default="")
-    
     pov_parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
                         help="Format of the input data", default="physicell")
     pov_parser.add_argument("--render",  action='store_true',
@@ -46,15 +36,22 @@ def main():
                         help="Total cpus availabile to run in parallel using multiprocessing")
     pov_parser.add_argument("--create-config", action="store", dest="config_out", default="",
                                 help="Create a defaul config XML file for generating POV files")
+    pov_parser.add_argument("--idxs", action="store", dest="strn_idxs", default="",
+                        help="String specifing the indexes of the output files. \
+                            The supported options include: \
+                            - slices: 1:10:1\
+                            - indexes: 1,2,5,10\
+                            - all (use glob)")
     
+
     args = parser.parse_args()
     if args.command == "plot-time-course":
-        plot.plot_time_course(args)
-    elif args.command == "povwriter":
+        plot.plot_time_course(args.output_folder, fig_fname=args.fig_fname, csv_fname=args.csv_fname, format=args.format)
+    elif args.command == "povray":
         if args.config_out:
             with open(args.config_out, "w") as fh:
                 print(f"Writing default POV-write config into {args.config_out}.")
-                fh.writelines(render.DEFAULT_XML)
+                fh.writelines(config.DEFAULT_XML)
         else:
             if args.config:
                 render.write_pov_files(args)
