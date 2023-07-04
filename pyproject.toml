@@ -4,12 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pctk"
-description = "PhysiCell ToolKit: a tool for handling MultiCellDS output from PhysiCell and PhysiBoSS simulations."
-readme = "README.rst"
-license = {text = "BSD 3-Clause License"}
+version = "0.2.0"
 authors = [
      {name = "Miguel Ponce de Leon", email = "miguel.ponce@bsc.es"},
 ]
+description = "PhysiCell ToolKit: a tool for handling MultiCellDS output from PhysiCell and PhysiBoSS simulations."
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "BSD 3-Clause License"}
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -24,9 +26,12 @@ dependencies = [
     "matplotlib",
     "pandas",
 ]
-version = "0.2.0"
 
 [project.scripts]
 pctk = "pctk.cmds.pctk:main"
 plot-time-course = "pctk.cmds.plot_time_course:main"
 write-pov-files  = "pctk.cmds.write_pov_files:main"
+
+[project.urls]
+"Homepage" = "https://github.com/migp11/pctk"
+"Bug Tracker" = "https://github.com/migp11/pctk/issues"
