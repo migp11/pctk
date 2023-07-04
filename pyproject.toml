@@ -7,6 +7,9 @@ name = "pctk"
 description = "PhysiCell ToolKit: a tool for handling MultiCellDS output from PhysiCell and PhysiBoSS simulations."
 readme = "README.rst"
 license = {text = "BSD 3-Clause License"}
+authors = [
+     {name = "Miguel Ponce de Leon", email = "miguel.ponce@bsc.es"},
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
