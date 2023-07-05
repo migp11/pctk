@@ -2,6 +2,7 @@ import os
 import json
 import glob
 import pandas as pd
+import scipy
 from scipy.io import loadmat    
 import xml.etree.ElementTree as ET
 
@@ -11,8 +12,8 @@ from .config import phase_grouping as default_phase_grouping
 __author__ = "Miguel Ponce de Leon"
 __copyright__ = "Copyright 2020, PhysiCell ToolKit project"
 __credits__ = ["Miguel Ponce de Leon"]
-__license__ = "GPL 3.0"
-__version__ = "0.1.0"
+__license__ = "BSD 3-Clause"
+__version__ = "0.2.1"
 __maintainer__ = "Miguel Ponce de Leon"
 __email__ = "miguel.ponce@bsc.es"
 __status__ = "dev"
@@ -255,7 +256,6 @@ class MultiCellDS(object):
             yield (time, microenv_matrix)
 
     def get_cells_summary_frame(self, phase_col="current_phase"):
-
         cell_phases = list(set(self.phase_grouping.values()))
         num_of_files = self.cells_file_count()
 

@@ -15,8 +15,8 @@ from pctk.config import default_pov_colors
 __author__ = "Miguel Ponce de Leon"
 __copyright__ = "Copyright 2020, PhysiCell ToolsKit project"
 __credits__ = ["Miguel Ponce de Leon"]
-__license__ = "GPL 3.0"
-__version__ = "0.1.0"
+__license__ = "BSD 3-Clause"
+__version__ = "0.2.1"
 __maintainer__ = "Miguel Ponce de Leon"
 __email__ = "miguel.ponce@bsc.es"
 __status__ = "dev"
