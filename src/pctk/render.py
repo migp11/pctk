@@ -11,43 +11,6 @@ from pctk.povwriter import POVWriter
 povray_path = None
 
 
-
-def create_parser():
-
-    povray_link = "http://www.povray.org/download/"
-
-    parser = argparse.ArgumentParser(description="Render a bunch of PhysiCell output file into povray files")
-    
-    parser.add_argument("xml_config", action="store", help="XML configuration file")
-
-    parser.add_argument("--idxs", action="store", dest="strn_idxs", 
-                        help="String specifing the indexes of the output files. \
-                              The supported options include: \
-                              - slices: 1:10:1\
-                              - indexes: 1,2,5,10\
-                              - all (use glob)", 
-                        default="")
-    
-    parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
-                        help="Format of the input data", default="physicell")
-
-    parser.add_argument("--render",  action='store_true',
-                        help="Render the .pov files into .png. Requires povray ({povray_link})")
-
-    parser.add_argument("--width", action="store", dest="width", type=int, default=2160, 
-                        help="Width for povray rendered image")
-
-    parser.add_argument("--height", action="store", dest="height", type=int, default=2160, 
-                        help="Heigh for povray rendered image")
-
-    parser.add_argument("--cpus", action="store", dest="cpus", type=int, default=4, 
-                        help="Total CPUs availabile to run in parallel using multiprocessing")
-
-    parser.add_argument("--create-config", dest="create_default_config", default=False,
-                        help="Output format")
-
-    return parser
-
 def check_povray(exec='povray'):
     global povray_path
     povray_path = shutil.which(exec)
