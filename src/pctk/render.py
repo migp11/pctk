@@ -22,7 +22,7 @@ def local_write_pov_file(writer, idx):
 def render_to_png(pov_fname, width=1024, height=1024, png_fname=None):
     if png_fname is None:
         png_fname = pov_fname[0:-4] + ".png"
-    cmd_line = f"{povray_path} +H{height} +W{width} +I{pov_fname} +O{png_fname}"
+    cmd_line = f"{povray_path} +H{height} +W{width} +I{pov_fname} +O{png_fname} -d"
     exit_flag = os.system(cmd_line)
     if exit_flag != 0:
         print(f"Somthing went wrong running povray {cmd_line}. Command finished with exit flag {exit_flag}")
