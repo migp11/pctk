@@ -1,6 +1,7 @@
 import sys
 import re
 import argparse
+import pctk
 from pctk import plot
 from pctk import render
 from pctk import config
@@ -28,7 +29,7 @@ def parse_index_string(strn_idxs):
 
 def main():
     
-    parser = argparse.ArgumentParser(description="PhysiCell Tool Kit for handling and processing Physicell outputs")
+    parser = argparse.ArgumentParser(description=f"PhysiCell Tool Kit {pctk.__version__} for handling and processing Physicell outputs")
     parser.add_argument("output_folder", action="store", help="Folder where the simulation output is stored")
     parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
                         help="Format of the input data", default="physicell")
