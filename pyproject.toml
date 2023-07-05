@@ -19,8 +19,6 @@ classifiers = [
 ]
 
 dependencies = [
-    "requests",
-    "importlib-metadata", 
     "numpy", 
     "scipy", 
     "matplotlib",
