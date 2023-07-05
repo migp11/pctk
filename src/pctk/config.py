@@ -70,7 +70,6 @@ default_pov_colors = {
 
 
 DEFAULT_XML = """<?xml version="1.0" encoding="UTF-8"?>
-
 <povwriter_settings>
 	<camera>
 		<distance_from_origin units="micron">750</distance_from_origin>

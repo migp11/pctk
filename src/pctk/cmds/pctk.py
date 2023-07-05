@@ -4,6 +4,7 @@ import argparse
 from pctk import plot
 from pctk import render
 from pctk import config
+from pctk.povwriter import create_defulat_config
 
 
 
@@ -28,13 +29,15 @@ def parse_index_string(strn_idxs):
 def main():
     
     parser = argparse.ArgumentParser(description="PhysiCell Tool Kit for handling and processing Physicell outputs")
+    parser.add_argument("output_folder", action="store", help="Folder where the simulation output is stored")
+    parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
+                        help="Format of the input data", default="physicell")
     subparser = parser.add_subparsers(dest='command', help='sub-command help')
-    
+        
     plot_parser = subparser.add_parser('plot-time-course',
                                         description="Plot total cell grouped as Alive/Necrotic/Apoptotic vs Time")
-    plot_parser.add_argument("output_folder", action="store", help="Folder where the simulation output is stored")
-    plot_parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
-                        help="Format of the input data", default="physicell")
+    
+    
     plot_parser.add_argument("--figout", action="store", dest="fig_fname", default="./cell_vs_time.png",
                         help="File name to save the plot")    
     plot_parser.add_argument("--csvout", action="store", dest="csv_fname", default=None,
@@ -43,8 +46,6 @@ def main():
 
     pov_parser = subparser.add_parser('povray')
     pov_parser.add_argument("--config", action="store", help="XML configuration file for creating pov files")
-    pov_parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
-                        help="Format of the input data", default="physicell")
     pov_parser.add_argument("--render",  action='store_true',
                         help="Render the .pov files into .png. Requires povray ({povray_link})")
     pov_parser.add_argument("--width", action="store", dest="width", type=int, default=2160, 
@@ -68,17 +69,14 @@ def main():
         plot.plot_time_course(args.output_folder, fig_fname=args.fig_fname, csv_fname=args.csv_fname, format=args.format)
     elif args.command == "povray":
         if args.config_out:
-            with open(args.config_out, "w") as fh:
-                print(f"Writing default POV-write config into {args.config_out}.")
-                fh.writelines(config.DEFAULT_XML)
+            print(f"Writing default POV-write config into {args.config_out}.")
+            create_defulat_config(args.config_out, args.output_folder)
         else:
             if args.config:
-                
-                
                 index_list = parse_index_string(args.strn_idxs)
                 render.write_pov_files(args.config, index_list=index_list, format=args.format,
                                        num_of_threads=args.cpus, render=args.render, 
-                                       width=args.width, height=args.heigth)
+                                       width=args.width, height=args.height)
             else:
                 print("Error: --config is required parameter")
                 pov_parser.print_help()

@@ -3,13 +3,12 @@
 import os
 import numpy as np
 from math import pi, sin, cos
-
 import xml.etree.ElementTree as ET
 
+from pctk.config import DEFAULT_XML
 from pctk.config import phase_grouping 
 from pctk.config import phases_dict
 from pctk.config import default_pov_colors
-
 
 
 __author__ = "Miguel Ponce de Leon"
@@ -155,7 +154,7 @@ class POVWriter_config():
         
         # Parsing save node
         node = root.find("save")
-        self.options.folder = node.find("folder").text
+        self.options.output_folder = node.find("folder").text
         self.options.filebase = node.find("filebase").text
         self.options.time_index = int(node.find("time_index").text)
         self.options.filename = self.options.create_file_name(self.options.time_index)
@@ -440,6 +439,14 @@ class POVWriter():
         else:
             raise InvalidFormatException(self.format)
 
+
+def create_defulat_config(xml_fname, output_folder):
+    root = ET.fromstring(DEFAULT_XML)
+    node = root.find('save')
+    folder_node = node.find('folder')
+    folder_node.text = output_folder
+    with open(xml_fname, "w") as fh:
+        fh.writelines(ET.tostring(root, encoding='unicode'))
 
 
 def standard_pigment_and_finish_function():

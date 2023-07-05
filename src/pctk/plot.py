@@ -13,15 +13,15 @@ from pctk.config import default_cell_colors
 
     
 
-def pb_output_iterator(data_folder, sep=";"):
-    globing = os.path.join(data_folder, "cells_[0-9]*.txt")
+def pb_output_iterator(output_folder, sep=";"):
+    globing = os.path.join(output_folder, "cells_[0-9]*.txt")
     for fname in sorted(glob.glob(globing)):
         df = pd.read_csv(fname, sep=sep)
         t = df.Time[0]
         yield (t, df)
 
-def count_pb_files(data_folder):
-    globing = os.path.join(data_folder, "cells_[0-9]*.txt")
+def count_pb_files(output_folder):
+    globing = os.path.join(output_folder, "cells_[0-9]*.txt")
     return len(glob.glob(globing))
 
 
@@ -81,20 +81,20 @@ def plot_cells(df_time_course, color_dict, ax, xlabel="Time (min)", ylabel="Nº 
 
 
 
-def plot_time_course(data_folder, fig_fname="time_course.png", csv_fname="time_course.csv", format="physicell"):
+def plot_time_course(output_folder, fig_fname="time_course.png", csv_fname="time_course.csv", format="physicell"):
     phases_dict = multicellds.default_phases_dict
     phase_grouping = multicellds.default_phase_grouping
     print(phases_dict)
     # Globing output files according to the output format specified
     if format == 'physicell':
         phase_col = "current_phase"
-        mcds = multicellds.MultiCellDS(output_folder=data_folder)
+        mcds = multicellds.MultiCellDS(output_folder=output_folder)
         df_iterator = mcds.cells_as_frames_iterator()
         num_of_files = mcds.cells_file_count()
     elif format == 'physiboss':
         phase_col = "phase"
-        df_iterator = pb_output_iterator(data_folder)
-        num_of_files = count_pb_files(data_folder)
+        df_iterator = pb_output_iterator(output_folder)
+        num_of_files = count_pb_files(output_folder)
     
     # Initializing a Pandas Databrafe to store the data
     
@@ -103,7 +103,7 @@ def plot_time_course(data_folder, fig_fname="time_course.png", csv_fname="time_c
     data = np.zeros((num_of_files, 4), dtype=int)
     df_time_course = pd.DataFrame(columns=cell_columns, data=data)
 
-    print("Reading cell_output files from %i input files from %s" % (num_of_files, data_folder))
+    print("Reading cell_output files from %i input files from %s" % (num_of_files, output_folder))
     # Iterating over all cell_output files
     for i, (t, df) in enumerate(df_iterator):
         print("\tProcessing time step: %.0f" % t)

@@ -1,8 +1,6 @@
 import os
-import json
 import glob
 import pandas as pd
-import scipy
 from scipy.io import loadmat    
 import xml.etree.ElementTree as ET
 
