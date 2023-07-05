@@ -1,11 +1,27 @@
-import os, sys
+import sys
+import re
 import argparse
 from pctk.cmds import plot
 from pctk.cmds import render
 
 
 
-
+def parse_index_string(strn_idxs):
+    index_list = []    
+    pattern_slices = re.compile("(\d*):(\d*):(\d*)")
+    pattern_indexes = re.compile("(\d+)(,\d+)*")
+    pattern_all = re.compile("^all$")
+    
+    match = re.search(pattern_slices, strn_idxs)
+    if match:
+        from_idx = int(match.group(1))
+        to_idx = int(match.group(2))
+        inc = int(match.group(3))
+        index_list = list(range(from_idx, to_idx, inc))
+    elif re.search(pattern_indexes, strn_idxs):
+        index_list = [int(i) for i in strn_idxs.split(",")]
+    
+    return index_list
 
 
 def main():
@@ -15,7 +31,7 @@ def main():
     
     plot_parser = subparser.add_parser('plot-time-course',
                                         description="Plot total cell grouped as Alive/Necrotic/Apoptotic vs Time")
-    plot_parser.add_argument("data_folder", action="store", help="folder were the data is stored")
+    plot_parser.add_argument("output_folder", action="store", help="folder were the data is stored")
     plot_parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
                         help="Format of the input data", default="physicell")
     plot_parser.add_argument("--figout", action="store", dest="fig_fname", default="./cell_vs_time.png",
@@ -50,6 +66,7 @@ def main():
     args = parser.parse_args()
     if args.command == "plot-time-course":
         plot.plot_time_course(args)
+        output_folder
     elif args.command == "povwriter":
         if args.config_out:
             with open(args.config_out, "w") as fh:
@@ -57,7 +74,12 @@ def main():
                 fh.writelines(render.DEFAULT_XML)
         else:
             if args.config:
-                render.write_pov_files(args)
+                
+                
+                index_list = parse_index_string(args.strn_idxs)
+                render.write_pov_files(args.config, index_list=index_list, format=args.format,
+                                       num_of_threads=args.cpus, render=args.render, 
+                                       width=args.width, height=args.heigth)
             else:
                 print("Error: --config is required parameter")
                 pov_parser.print_help()

@@ -62,11 +62,11 @@ class Clipping_Plane:
 
 
 class PC_Options:
-    def __init__(self, folder="sample", filebase="output", format="physicell",
-                 time_index=0, camera_distance=1500, nuclear_offset=0.1, cell_bound=750, 
+    def __init__(self, output_folder="output", filebase="output", format="physicell",
+                 time_index=0, nuclear_offset=0.1, cell_bound=750, 
                  threads=1, use_standard_colors=True):
 
-        self.folder = folder
+        self.output_folder = output_folder
         self.filebase = filebase
         self.format = format
         self.time_index = time_index
@@ -87,12 +87,12 @@ class PC_Options:
 
     def create_file_name(self, index):
         if self.format == 'physicell':
-            fname  = "{base_name}{:08}_cells_physicell.mat".format(index, base_name=self.filebase)
+            fname  = f"{self.filebase}{index:08}_cells_physicell.mat"
         elif self.format == 'physiboss':
-            fname  = "cells_{:05}.txt".format(index)
+            fname  = f"cells_{index:05}.txt"
         else:
             fname = None
-        fname = os.path.join(self.folder, fname)
+        fname = os.path.join(self.output_folder, fname)
         return fname
 
 
@@ -419,9 +419,8 @@ class POVWriter():
             self._write_pov_header(fh)       
             print("Writing %i cells ... " % mat.shape[0])
             self._write_all_cells(fh, mat)
-            return pov_fname
         
-        return None
+        return pov_fname
 
     def read_cells_file(self, fname):
         if self.format == 'physicell':
