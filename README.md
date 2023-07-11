@@ -91,7 +91,7 @@ optional arguments:
 
 #### Examples
 
-`pctk povwriter output/ --figout physicell_time_plot.png`
+`pctk plot-time-course output/ --figout physicell_time_plot.png`
 
 ![image](./docs/cell_vs_time.png)<br>
 **Figure 1. Time course of a simulation of cancer cell under a treatment.**
