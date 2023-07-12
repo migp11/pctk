@@ -23,7 +23,7 @@ pandas==1.1.5
     # via
     #   pctk (setup.py)
     #   seaborn
-pillow==8.4.0
+pillow==9.3.0
     # via matplotlib
 pyparsing==3.0.9
     # via matplotlib
