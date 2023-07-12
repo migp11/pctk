@@ -15,7 +15,7 @@ __author__ = "Miguel Ponce de Leon"
 __copyright__ = "Copyright 2020, PhysiCell ToolsKit project"
 __credits__ = ["Miguel Ponce de Leon"]
 __license__ = "BSD 3-Clause"
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __maintainer__ = "Miguel Ponce de Leon"
 __email__ = "miguel.ponce@bsc.es"
 __status__ = "dev"
@@ -24,7 +24,7 @@ __status__ = "dev"
 class InvalidFormatException(Exception):
     def __init__(self, format):
         self.format = format
-        self.message = f"Invalid format {format}. Format must be physicell or physiboss"
+        self.message = f"Invalid format {format}. The format must be PhysiCell or legacy PhysiBoSS"
         super().__init__(self.message)
 
 
