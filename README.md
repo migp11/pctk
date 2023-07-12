@@ -109,6 +109,8 @@ This command is an almost "literal" translation from C++  to Python 3. The origi
 
 <br>
 [https://github.com/PhysiCell-Tools/PhysiCell-povwriter](https://github.com/PhysiCell-Tools/PhysiCell-povwriter)
+<be>
+[http://www.mathcancer.org/blog/povwriter/](http://www.mathcancer.org/blog/povwriter/)
 
 <br>
 While I've not found many differences in the level of performance, the main advantage of having a Python version of PhysiCell-povwriter is that is much easier to extend and customize. Furthermore, handling command line arguments and parsing config files is also much easier in Python. And the package can be easily extended to add new subcommands and functionalities. The subcommands `pctk Povwriter` reads xml-based configuration for generating .pov files from PhysiCell output files.
@@ -137,6 +139,78 @@ optional arguments:
 pctk povwriter --create-config povwriter.xml
 Writing default POV-write config into povwriter.xml
 ```
+This command will generate the `XML` configuration file needed to create `.pov` files which are used by PovRay to generate the 3D renders. The file looks like this:
+
+```<povwriter_settings>
+	<camera>
+		<distance_from_origin units="micron">750</distance_from_origin>
+		<xy_angle>3.92699081699</xy_angle> 
+		<yz_angle>1.0471975512</yz_angle>  
+	</camera>
+
+	<options>
+		<use_standard_colors>true</use_standard_colors>
+		<nuclear_offset units="micron">0.1</nuclear_offset>  
+		<cell_bound units="micron">500</cell_bound> 
+		<threads>1</threads>
+	</options>
+
+	<save> 
+		<folder>test/</folder>
+		<filebase>output</filebase> 
+		<time_index>0</time_index> 
+	</save>
+	
+	<clipping_planes>  
+		<clipping_plane>0,-1,0,0</clipping_plane>
+		<clipping_plane>-1,0,0,0</clipping_plane>
+		<clipping_plane>0,0,1,0</clipping_plane>
+	</clipping_planes>
+	
+	 
+	   
+	<cell_color_definitions>
+		
+		 
+		<cell_colors type="0">
+			<alive>
+				<cytoplasm>.25,1,.25</cytoplasm>  
+				<nuclear>0.03,0.125,0</nuclear>
+				<finish>0.05,1,0.1</finish> 
+			</alive>
+			<apoptotic>
+				<cytoplasm>1,0,0</cytoplasm>  
+				<nuclear>0.125,0,0</nuclear>
+				<finish>0.05,1,0.1</finish> 
+			</apoptotic>
+			<necrotic>
+				<cytoplasm>1,0.5412,0.1490</cytoplasm>  
+				<nuclear>0.125,0.06765,0.018625</nuclear>
+				<finish>0.01,0.5,0.1</finish> 
+			</necrotic>
+		</cell_colors>
+		
+		<cell_colors type="1">
+			<alive>
+				<cytoplasm>0.25,0.25,1</cytoplasm>  
+				<nuclear>0.03,0.03,0.125</nuclear>
+				<finish>0.05,1,0.1</finish> 
+			</alive>
+			<apoptotic>
+				<cytoplasm>1,0,0</cytoplasm>  
+				<nuclear>0.125,0,0</nuclear>
+				<finish>0.05,1,0.1</finish> 
+			</apoptotic>
+			<necrotic>
+				<cytoplasm>1,0.5412,0.1490</cytoplasm>  
+				<nuclear>0.125,0.06765,0.018625</nuclear>
+				<finish>0.01,0.5,0.1</finish> 
+			</necrotic>
+		</cell_colors>
+	
+	</cell_color_definitions>``` 
+
+
 #### Creating POV files using config/povwriter-settings.xml config
 ```
 pctk povwriter --config config/povwriter-settings.xml
