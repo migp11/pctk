@@ -29,7 +29,7 @@ def parse_index_string(strn_idxs):
 
 def main():
     
-    parser = argparse.ArgumentParser(description=f"PhysiCell Tool Kit {pctk.__version__} for handling and processing Physicell outputs")
+    parser = argparse.ArgumentParser(description=f"PhysiCell Tool Kit Version {pctk.__version__} for handling and processing Physicell outputs")
     parser.add_argument("output_folder", action="store", help="Folder where the simulation output is stored")
     parser.add_argument("--format", action="store", dest="format", choices=("physicell", "physiboss"),
                         help="Format of the input data", default="physicell")
@@ -48,15 +48,15 @@ def main():
     pov_parser = subparser.add_parser('povray')
     pov_parser.add_argument("--config", action="store", help="XML configuration file for creating pov files")
     pov_parser.add_argument("--render",  action='store_true',
-                        help="Render the .pov files into .png. Requires povray ({povray_link})")
+                        help="Render the .pov files into .png. Requires PovRay ({povray_link})")
     pov_parser.add_argument("--width", action="store", dest="width", type=int, default=2160, 
                         help="Width for povray rendered image")
     pov_parser.add_argument("--height", action="store", dest="height", type=int, default=2160, 
                         help="Heigh for povray rendered image")
     pov_parser.add_argument("--cpus", action="store", dest="cpus", type=int, default=4, 
-                        help="Total cpus availabile to run in parallel using multiprocessing")
-    pov_parser.add_argument("--create-config", action="store", dest="config_out", default="",
-                                help="Create a defaul config XML file for generating POV files")
+                        help="Total cpus available to run in parallel using multiprocessing")
+    pov_parser.add_argument("--create-config", action="store", dest="config_out", default=None,
+                                help="Create a default config XML file for generating POV files")
     pov_parser.add_argument("--idxs", action="store", dest="strn_idxs", default="",
                         help="String specifing the indexes of the output files. \
                             The supported options include: \
