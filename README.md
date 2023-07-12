@@ -45,12 +45,13 @@ num_of_files = reader.cells_file_count()
 df_iterator = reader.cells_as_frames_iterator()
 
 for (t,df_cells) in df_iterator:
-    ...:     alive = (df_cells.current_phase<=14).sum()
-    ...:     dead = (df_cells.current_phase>14).sum()
-    ...:     print(f"Total alive {alive} and dead {dead} cellw at time {t}")
-
+    alive = (df_cells.current_phase<=14).sum()
+    dead = (df_cells.current_phase>14).sum()
+    print(f"Total alive {alive} and dead {dead} cellw at time {t}")
 
 ```
+
+This code snippet will iterate over all simulation outputs and print the number of alive an dead cells aat each saved time point.
 
 # Ready-to-run command line tool-kit
 There are some ready-to-run scripts that can be used to summarize and visualize PhysiCell/PhysiBoSS simulation outputs. 
@@ -61,16 +62,20 @@ Subcommands include:
 
 
 ~~~~
-usage: pctk [-h] {plot-time-course,povwriter} ...
+usage: pctk [-h] [--format {physicell,physiboss}] output_folder {plot-time-course,povray} ...
 
-PhysiCell Tool Kit for handling and processing PhysiCell outputs
+PhysiCell Tool Kit 0.2.2 for handling and processing PhysiCell outputs
 
 positional arguments:
-  {plot-time-course,povwriter}
+  output_folder         Folder where the simulation output is stored
+  {plot-time-course,povray}
                         sub-command help
 
 optional arguments:
   -h, --help            show this help message and exit
+  --format {physicell,physiboss}
+                        Format of the input data
+
 ~~~~
 
 ## Ploting time course:
@@ -79,25 +84,20 @@ The colour mapping can be easily customized to represent other cell-agent variab
 	
 
 ~~~~
-usage: pctk plot-time-course [-h] [--format {physicell,physiboss}] [--figout FIG_FNAME] [--csvout CSV_FNAME] data_folder
+usage: pctk output_folder plot-time-course [-h] [--figout FIG_FNAME] [--csvout CSV_FNAME]
 
 Plot total cell grouped as Alive/Necrotic/Apoptotic vs Time
 
-positional arguments:
-  data_folder           folder where the data is stored
-
 optional arguments:
-  -h, --help            show this help message and exit
-  --format {physicell,physiboss}
-                        Format of the input data
-  --figout FIG_FNAME    File name to save the plot
-  --csvout CSV_FNAME    File name to store the summary table used for the plot
+  -h, --help          show this help message and exit
+  --figout FIG_FNAME  File name to save the plot
+  --csvout CSV_FNAME  File name to store the summary table used for the plot
 	
 ~~~~
 
 #### Examples
 
-`pctk plot-time-course output/ --figout physicell_time_plot.png`
+`pctk output/ plot-time-course --figout physicell_time_plot.png`
 
 ![image](./docs/cell_vs_time.png)<br>
 **Figure 1. Time course of a simulation of cancer cells under a treatment.**
@@ -109,29 +109,29 @@ This command is an almost "literal" translation from C++  to Python 3. The origi
 
 <br>
 [https://github.com/PhysiCell-Tools/PhysiCell-povwriter](https://github.com/PhysiCell-Tools/PhysiCell-povwriter)
+<be>
+[http://www.mathcancer.org/blog/povwriter/](http://www.mathcancer.org/blog/povwriter/)
 
 <br>
-While I've not found many differences in the level of performance, the main advantage of having a Python version of PhysiCell-povwriter is that is much easier to extend and customize. Furthermore, handling command line arguments and parsing config files is also much easier in Python. And the package can be easily extended to add new subcommands and functionalities. The subcommands `pctk povwriter` reads xml-based configuration for generating .pov files from PhysiCell output files.
+While I've not found many differences in the level of performance, the main advantage of having a Python version of PhysiCell-povwriter is that is much easier to extend and customize. Furthermore, handling command line arguments and parsing config files is also much easier in Python. And the package can be easily extended to add new subcommands and functionalities. The subcommands `pctk Povwriter` reads xml-based configuration for generating .pov files from PhysiCell output files.
 The generated pov files can then be rendered using the open source The Persistence of Vision Raytracer suite PovRay ([http://www.povray.org/](http://www.povray.org/)).
 
 
-The command povwriter uses an XML config file and PhyisiCell outputs to generate POV files for each time step <br>
+The command PovWriter uses an XML config file and PhyisiCell outputs to generate POV files for each time step <br>
 
 ```
-usage: pctk povwriter [-h] [--config CONFIG] [--idxs STRN_IDXS] [--format {physicell,physiboss}] [--render] [--width WIDTH] [--height HEIGHT] [--cpus CPUS] [--create-config CONFIG_FNAME]
+usage: pctk output_folder povray [-h] [--config CONFIG] [--render] [--width WIDTH] [--height HEIGHT] [--cpus CPUS] [--create-config CONFIG_OUT] [--idxs STRN_IDXS]
 
 optional arguments:
   -h, --help            show this help message and exit
   --config CONFIG       XML configuration file for creating pov files
-  --idxs STRN_IDXS      String specifying the indexes of the output files. The supported options include: - slices: 1:10:1 - indexes: 1,2,5,10 - all (use glob)
-  --format {physicell,physiboss}
-                        Format of the input data
   --render              Render the .pov files into .png. Requires povray ({povray_link})
   --width WIDTH         Width for povray rendered image
   --height HEIGHT       Heigh for povray rendered image
-  --cpus CPUS           Total cpus available to run in parallel using multiprocessing
-  --create-config CONFIG_FNAME
+  --cpus CPUS           Total cpus availabile to run in parallel using multiprocessing
+  --create-config CONFIG_OUT
                         Create a default config XML file for generating POV files
+  --idxs STRN_IDXS      String specifying the indexes of the output files. The supported options include: - slices: 1:10:1 - indexes: 1,2,5,10 - all (use glob)
 ```
 ### Example: generating a new povwriter.xml configuration files
 
@@ -139,6 +139,78 @@ optional arguments:
 pctk povwriter --create-config povwriter.xml
 Writing default POV-write config into povwriter.xml
 ```
+This command will generate the `XML` configuration file needed to create `.pov` files which are used by PovRay to generate the 3D renders. The file looks like this:
+
+```<povwriter_settings>
+	<camera>
+		<distance_from_origin units="micron">750</distance_from_origin>
+		<xy_angle>3.92699081699</xy_angle> 
+		<yz_angle>1.0471975512</yz_angle>  
+	</camera>
+
+	<options>
+		<use_standard_colors>true</use_standard_colors>
+		<nuclear_offset units="micron">0.1</nuclear_offset>  
+		<cell_bound units="micron">500</cell_bound> 
+		<threads>1</threads>
+	</options>
+
+	<save> 
+		<folder>test/</folder>
+		<filebase>output</filebase> 
+		<time_index>0</time_index> 
+	</save>
+	
+	<clipping_planes>  
+		<clipping_plane>0,-1,0,0</clipping_plane>
+		<clipping_plane>-1,0,0,0</clipping_plane>
+		<clipping_plane>0,0,1,0</clipping_plane>
+	</clipping_planes>
+	
+	 
+	   
+	<cell_color_definitions>
+		
+		 
+		<cell_colors type="0">
+			<alive>
+				<cytoplasm>.25,1,.25</cytoplasm>  
+				<nuclear>0.03,0.125,0</nuclear>
+				<finish>0.05,1,0.1</finish> 
+			</alive>
+			<apoptotic>
+				<cytoplasm>1,0,0</cytoplasm>  
+				<nuclear>0.125,0,0</nuclear>
+				<finish>0.05,1,0.1</finish> 
+			</apoptotic>
+			<necrotic>
+				<cytoplasm>1,0.5412,0.1490</cytoplasm>  
+				<nuclear>0.125,0.06765,0.018625</nuclear>
+				<finish>0.01,0.5,0.1</finish> 
+			</necrotic>
+		</cell_colors>
+		
+		<cell_colors type="1">
+			<alive>
+				<cytoplasm>0.25,0.25,1</cytoplasm>  
+				<nuclear>0.03,0.03,0.125</nuclear>
+				<finish>0.05,1,0.1</finish> 
+			</alive>
+			<apoptotic>
+				<cytoplasm>1,0,0</cytoplasm>  
+				<nuclear>0.125,0,0</nuclear>
+				<finish>0.05,1,0.1</finish> 
+			</apoptotic>
+			<necrotic>
+				<cytoplasm>1,0.5412,0.1490</cytoplasm>  
+				<nuclear>0.125,0.06765,0.018625</nuclear>
+				<finish>0.01,0.5,0.1</finish> 
+			</necrotic>
+		</cell_colors>
+	
+	</cell_color_definitions>``` 
+
+
 #### Creating POV files using config/povwriter-settings.xml config
 ```
 pctk povwriter --config config/povwriter-settings.xml
@@ -154,7 +226,7 @@ Finished!
 
 #### Creating POV files using config/povwriter-settings.xml slicing over physicell output files using 0:4:2
 ```
-pctk povwriter --config src/test/data/config/povwriter-settings.xml --idxs 0:4:2
+pctk output/ povwriter --config src/test/data/config/povwriter-settings.xml --idxs 0:4:2
 Found 3 clipping planes
 Found 2 cell color definitions ... 
 Start processing  4 cpus
