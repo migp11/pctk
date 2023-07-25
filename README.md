@@ -208,7 +208,8 @@ This command will generate the `XML` configuration file needed to create `.pov` 
 			</necrotic>
 		</cell_colors>
 	
-	</cell_color_definitions>``` 
+	</cell_color_definitions>
+``` 
 
 
 #### Creating POV files using config/povwriter-settings.xml config
@@ -247,7 +248,7 @@ Any of these commands will generate one or many .pov files. If you have PovRay i
 pctk povwriter --config config/povwriter-settings.xml --idx 10 --render
 ```
 
-If PovRay is installed, this command will generate a render using the provided `povwriter-settings.xm`
+If PovRay is installed, this command will generate a render using the provided `povwriter-settings.xml`
 
 ![image](./docs/cell3d.png)<br>
 **Figure 2. Render of a 3D spheroid of cancer cells.**
