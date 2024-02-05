@@ -267,7 +267,7 @@ class MultiCellDS(object):
 
             # Rename the phases integer codes using the phases_dict as the mapping
             s = df[phase_col]
-            s.replace(to_replace=self.phases_dict,  value=None,inplace=True)
+            s.replace(to_replace=self.phases_dict, value=None, inplace=True)
 
             # Count the number of cells in each phase
             counts = s.value_counts()
