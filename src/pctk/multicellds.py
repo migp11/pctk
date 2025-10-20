@@ -111,6 +111,8 @@ class MultiCellDS(object):
             column = child.text
             index = child.attrib["index"]
             size = int(child.attrib["size"])
+            if size < 1:
+                return cell_columns
             if size == 1:
                 cell_columns.append(column)
                 continue
@@ -122,6 +124,11 @@ class MultiCellDS(object):
             if size == 3:
                 for i, v in enumerate(['x', 'y', 'z']):
                     cell_columns.append(v + self._separator + column)
+                    if i == size: 
+                        break
+            if size > 3:
+                for I in range(size):
+                    cell_columns.appendf"{(v}{self._separator}{column}")
                     if i == size: 
                         break
                 
