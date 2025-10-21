@@ -128,7 +128,7 @@ class MultiCellDS(object):
                         break
             if size > 3:
                 for I in range(size):
-                    cell_columns.append(f"{(v}{self._separator}{column}")
+                    cell_columns.append(f"{v}{self._separator}{column}")
                     if i == size: 
                         break
                 
